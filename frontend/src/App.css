@@ -1,395 +1,42 @@
-/* app.css */
-
-/* Base styles */
-body {
-  font-family: 'Inter', 'Arial', sans-serif;
-  background: linear-gradient(135deg, #151133 60%, #23234b 100%);
-  color: #f2f2f2;
-  margin: 0;
-  padding: 0;
-}
-
-/* Navbar */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 32px 48px;
-  background: rgba(20, 20, 40, 0.92);
-  box-shadow: 0 4px 16px rgba(32,32,64,0.15);
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
 }
 
 .logo {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #ad96fd;
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-.nav-links {
-  display: flex;
-  gap: 32px;
-  list-style: none;
-}
-
-.nav-links li {
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.nav-links li:hover {
-  color: #ad96fd;
-}
-
-.cta-btn {
-  background: linear-gradient(90deg, #7853fa, #ad96fd);
-  color: white;
-  border: none;
-  padding: 10px 24px;
-  border-radius: 24px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.cta-btn:hover {
-  background: linear-gradient(90deg, #ad96fd, #7853fa);
-}
-
-/* Hero Section */
-.hero-section {
-  min-height: 60vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 96px 0 56px 0;
-  position: relative;
-  text-align: center;
-}
-
-.hero-content h1 {
-  font-size: 2.8rem;
-  font-weight: 800;
-  margin-top: 32px;
-  color: #fff;
-  letter-spacing: 1px;
-}
-
-.hero-content p {
-  font-size: 1.25rem;
-  max-width: 520px;
-  margin: 24px auto 32px;
-  color: #dad2ff;
-}
-
-.hero-action {
-  background: linear-gradient(90deg, #31e2f1, #ad96fd);
-  border: none;
-  border-radius: 28px;
-  padding: 16px 50px;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #151133;
-  cursor: pointer;
-  margin-top: 16px;
-  box-shadow: 0 8px 32px rgba(173,150,253,0.14);
-  transition: background 0.3s, color 0.3s;
-}
-
-.hero-action:hover {
-  background: linear-gradient(90deg, #ad96fd, #31e2f1);
-  color: #2b216d;
-}
-
-/* Section Styles */
-section {
-  padding: 64px 0;
-  margin: 0 auto;
-  max-width: 1080px;
-}
-
-h2 {
-  font-size: 2.1rem;
-  margin-bottom: 16px;
-  color: #ad96fd;
-  font-weight: 700;
-}
-
-section p {
-  font-size: 1.12rem;
-  color: #e0e7ff;
-  margin-bottom: 20px;
-}
-
-/* Placeholder images, adjust to fit real assets */
-.workflow-img, .security-img, .enterprise-logos {
-  height: 180px;
-  background: rgba(173,150,253,0.12);
-  border-radius: 12px;
-  margin: 32px auto;
-  width: 70%;
-}
-
-/* Footer Styles */
-.footer {
-  width: 100%;
-  padding: 32px;
-  background: #1d193e;
-  text-align: center;
-  color: #ad96fd;
-  font-size: 1.1rem;
-  margin-top: 56px;
-  border-top: 2px solid #ad96fd;
-}
-
-/* Responsive adjustments */
-@media (max-width: 770px) {
-  .navbar {
-    flex-direction: column;
-    gap: 12px;
-    padding: 20px;
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
   }
-  .nav-links {
-    gap: 18px;
-  }
-  .hero-section {
-    padding: 56px 0 28px 0;
-  }
-  h2 {
-    font-size: 1.35rem;
-  }
-  .hero-content h1 {
-    font-size: 2.1rem;
-  }
-  section {
-    padding: 32px 0;
-    max-width: 96vw;
+  to {
+    transform: rotate(360deg);
   }
 }
 
-.hero-mascot {
-  width: 180px;
-  height: auto;
-  margin: 32px auto 0 auto;
-  display: block;
-  filter: drop-shadow(0 8px 32px rgba(173,150,253,0.19));
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
 }
 
-
-.auth-container {
-  max-width: 400px;
-  margin: 60px auto;
-  padding: 24px;
-  background: #1a1a1a;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  color: #f2f2f2;
+.card {
+  padding: 2em;
 }
 
-.auth-header h2 {
-  margin: 0 0 8px;
-  font-size: 2rem;
-}
-
-.auth-header p {
-  color: #ad96fd;
-  margin: 0;
-  font-size: 1rem;
-}
-
-.auth-form {
-  margin-top: 20px;
-}
-
-.auth-input {
-  width: 100%;
-  padding: 12px 16px;
-  margin: 10px 0;
-  border: 1px solid #555;
-  border-radius: 8px;
-  background: #151133;
-  color: #fff;
-  font-size: 1rem;
-}
-
-.auth-input::placeholder {
-  color: #999;
-}
-
-.auth-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 20px;
-  background: linear-gradient(90deg, #646cff, #ad96fd);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  cursor: pointer;
-}
-
-.auth-button:hover {
-  background: linear-gradient(90deg, #ad96fd, #646cff);
-}
-
-.auth-footer {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 0.95rem;
-  color: #ad96fd;
-}
-
-.auth-footer button {
-  background: none;
-  color: #646cff;
-  border: none;
-  cursor: pointer;
-}
-
-.auth-footer button:hover {
-  text-decoration: underline;
-}
-
-.robotics-home {
-  max-width: 800px;
-  margin: 48px auto;
-  padding: 32px;
-  background: #1a1a1a;
-  border-radius: 18px;
-  box-shadow: 0 8px 36px rgba(32,32,64,0.18);
-  color: #fff;
-}
-
-.hero-section h1 {
-  font-size: 2.6rem;
-  margin-bottom: 8px;
-  color: #ad96fd;
-  font-weight: 900;
-}
-
-.hero-section p {
-  color: #31e2f1;
-  font-size: 1.1rem;
-  margin-bottom: 30px;
-}
-
-.home-section {
-  margin-top: 24px;
-}
-
-.home-section h2 {
-  font-size: 1.35rem;
-  margin-bottom: 18px;
-}
-
-.tier {
-  background: #23234b;
-  border-radius: 12px;
-  padding: 16px 28px;
-  margin-bottom: 28px;
-  box-shadow: 0 4px 16px rgba(173,150,253,0.06);
-}
-
-.tier h3 {
-  color: #ad96fd;
-  font-size: 1.1rem;
-  margin-bottom: 6px;
-}
-
-.tier ul {
-  padding-left: 18px;
-  margin: 8px 0 0 0;
-}
-
-.tier li {
-  margin-bottom: 6px;
-  font-size: 1rem;
-  color: #dad2ff;
-}
-
-.premium-price {
-  color: #31e2f1;
-  margin: 16px 0 0 0;
-  font-size: 1.07rem;
-}
-
-
-.auth-switch {
-  display: block;
-  margin: 24px auto 0;
-  padding: 10px 20px;
-  background: #646cff;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.auth-switch:hover {
-  background: #ad96fd;
-}
-
-.robotics-home {
-  max-width: 800px;
-  margin: 48px auto;
-  padding: 32px;
-  background: #1a1a1a;
-  border-radius: 18px;
-  box-shadow: 0 8px 36px rgba(32,32,64,0.18);
-  color: #fff;
-}
-
-.hero-section h1 {
-  font-size: 2.6rem;
-  margin-bottom: 8px;
-  color: #ad96fd;
-  font-weight: 900;
-}
-
-.hero-section p {
-  color: #31e2f1;
-  font-size: 1.1rem;
-  margin-bottom: 30px;
-}
-
-.home-section {
-  margin-top: 24px;
-}
-
-.home-section h2 {
-  font-size: 1.35rem;
-  margin-bottom: 18px;
-}
-
-.tier {
-  background: #23234b;
-  border-radius: 12px;
-  padding: 16px 28px;
-  margin-bottom: 28px;
-  box-shadow: 0 4px 16px rgba(173,150,253,0.06);
-}
-
-.tier h3 {
-  color: #ad96fd;
-  font-size: 1.1rem;
-  margin-bottom: 6px;
-}
-
-.tier ul {
-  padding-left: 18px;
-  margin: 8px 0 0 0;
-}
-
-.tier li {
-  margin-bottom: 6px;
-  font-size: 1rem;
-  color: #dad2ff;
-}
-
-.premium-price {
-  color: #31e2f1;
-  margin: 16px 0 0 0;
-  font-size: 1.07rem;
+.read-the-docs {
+  color: #888;
 }
