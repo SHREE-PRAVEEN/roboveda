@@ -17,6 +17,7 @@ const DevPortal = lazy(() => import('./pages/DevPortal/DevPortal'))
 const Dashboard = lazy(() => import('./pages/Dashboard/Dashboard'))
 const Login = lazy(() => import('./pages/Auth/Login'))
 const Register = lazy(() => import('./pages/Auth/Register'))
+const VerifyEmail = lazy(() => import('./pages/Auth/VerifyEmail'))
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="/dev-portal" element={<DevPortal />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
         
         {/* Dashboard Routes */}
         <Route path="/dashboard/*" element={

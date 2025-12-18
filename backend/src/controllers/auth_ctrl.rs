@@ -6,6 +6,7 @@ use bcrypt::{hash, verify, DEFAULT_COST};
 
 use crate::models::user::{RegisterRequest, LoginRequest, User, UserResponse, AuthResponse};
 use crate::utils::jwt::create_token;
+use crate::utils::verification::{generate_verification_token, get_token_expiration, create_verification_email};
 use crate::config::AppConfig;
 
 // Register new user
@@ -221,6 +222,150 @@ pub async fn get_profile(
             log::error!("Database error fetching profile: {}", e);
             HttpResponse::InternalServerError().json(serde_json::json!({
                 "error": "Database error"
+            }))
+        }
+    }
+}
+
+// Send verification email
+pub async fn send_verification_email(
+    pool: web::Data<Arc<PgPool>>,
+    config: web::Data<AppConfig>,
+    body: web::Json<serde_json::Value>,
+) -> HttpResponse {
+    let email = match body.get("email").and_then(|v: &serde_json::Value| v.as_str()) {
+        Some(e) => e,
+        None => {
+            return HttpResponse::BadRequest().json(serde_json::json!({
+                "error": "Email is required"
+            }));
+        }
+    };
+
+    // Find user by email
+    let user = match sqlx::query_as::<_, User>(
+        "SELECT * FROM users WHERE email = $1"
+    )
+    .bind(email)
+    .fetch_optional(pool.get_ref().as_ref())
+    .await
+    {
+        Ok(user) => user,
+        Err(e) => {
+            log::error!("Database error: {}", e);
+            return HttpResponse::InternalServerError().json(serde_json::json!({
+                "error": "Database error"
+            }));
+        }
+    };
+
+    match user {
+        Some(u) => {
+            // Generate verification token
+            let token = generate_verification_token();
+            let expires = get_token_expiration();
+
+            // Store token in database
+            if let Err(e) = sqlx::query(
+                "UPDATE users SET verification_token = $1, verification_token_expires = $2 WHERE id = $3"
+            )
+            .bind(&token)
+            .bind(expires)
+            .bind(u.id)
+            .execute(pool.get_ref().as_ref())
+            .await
+            {
+                log::error!("Failed to store verification token: {}", e);
+                return HttpResponse::InternalServerError().json(serde_json::json!({
+                    "error": "Failed to send verification email"
+                }));
+            }
+
+            // Create email content (in real app, send via SMTP)
+            let (subject, body_text) = create_verification_email(
+                &u.username,
+                &token,
+                &config.frontend_url,
+            );
+
+            log::info!("📧 Verification email for {}: Token: {}", email, &token[..10]);
+            log::info!("Subject: {}", subject);
+            log::info!("Body preview: {}...", &body_text[..100]);
+
+            HttpResponse::Ok().json(serde_json::json!({
+                "message": "Verification email sent",
+                "email": email,
+                "token": token  // For testing - remove in production
+            }))
+        }
+        None => {
+            HttpResponse::NotFound().json(serde_json::json!({
+                "error": "User not found"
+            }))
+        }
+    }
+}
+
+// Verify email with token
+pub async fn verify_email(
+    pool: web::Data<Arc<PgPool>>,
+    body: web::Json<serde_json::Value>,
+) -> HttpResponse {
+    let token = match body.get("token").and_then(|v: &serde_json::Value| v.as_str()) {
+        Some(t) => t,
+        None => {
+            return HttpResponse::BadRequest().json(serde_json::json!({
+                "error": "Token is required"
+            }));
+        }
+    };
+
+    // Find user with matching token that hasn't expired
+    let user = match sqlx::query_as::<_, User>(
+        "SELECT * FROM users WHERE verification_token = $1 AND verification_token_expires > NOW()"
+    )
+    .bind(token)
+    .fetch_optional(pool.get_ref().as_ref())
+    .await
+    {
+        Ok(user) => user,
+        Err(e) => {
+            log::error!("Database error: {}", e);
+            return HttpResponse::InternalServerError().json(serde_json::json!({
+                "error": "Database error"
+            }));
+        }
+    };
+
+    match user {
+        Some(u) => {
+            // Mark user as verified
+            match sqlx::query(
+                "UPDATE users SET is_verified = TRUE, verification_token = NULL, verification_token_expires = NULL WHERE id = $1"
+            )
+            .bind(u.id)
+            .execute(pool.get_ref().as_ref())
+            .await
+            {
+                Ok(_) => {
+                    log::info!("✅ User verified: {}", u.email);
+                    HttpResponse::Ok().json(serde_json::json!({
+                        "message": "Email verified successfully",
+                        "user_id": u.id,
+                        "email": u.email
+                    }))
+                }
+                Err(e) => {
+                    log::error!("Failed to verify user: {}", e);
+                    HttpResponse::InternalServerError().json(serde_json::json!({
+                        "error": "Failed to verify email"
+                    }))
+                }
+            }
+        }
+        None => {
+            HttpResponse::Unauthorized().json(serde_json::json!({
+                "error": "Invalid or expired verification token"
             }))
         }
     }

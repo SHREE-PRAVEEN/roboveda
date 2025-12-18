@@ -11,6 +11,7 @@ pub struct AppConfig {
     pub database_url: String,
     pub jwt_secret: String,
     pub jwt_expiration: i64,
+    pub frontend_url: String,
     pub stripe_secret_key: String,
     pub razorpay_key_id: String,
     pub razorpay_key_secret: String,
@@ -35,6 +36,8 @@ impl AppConfig {
                 .unwrap_or_else(|_| "86400".to_string())
                 .parse()
                 .unwrap_or(86400),
+            frontend_url: std::env::var("FRONTEND_URL")
+                .unwrap_or_else(|_| "http://localhost:3000".to_string()),
             stripe_secret_key: std::env::var("STRIPE_SECRET_KEY")
                 .unwrap_or_default(),
             razorpay_key_id: std::env::var("RAZORPAY_KEY_ID")

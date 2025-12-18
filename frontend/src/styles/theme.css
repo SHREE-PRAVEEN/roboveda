@@ -69,18 +69,21 @@
 /* Gradient text presets */
 .gradient-blue-purple {
   background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .gradient-green-cyan {
   background: linear-gradient(135deg, #00ff88, #06b6d4);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .gradient-pink-orange {
   background: linear-gradient(135deg, #ec4899, #f97316);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
