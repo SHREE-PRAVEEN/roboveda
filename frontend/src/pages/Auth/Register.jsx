@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import api from '../../services/api'
 import '../../styles/globals.css'
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -20,20 +22,41 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+    setSuccess('')
 
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match')
       return
     }
 
+    if (formData.password.length < 8) {
+      setError('Password must be at least 8 characters')
+      return
+    }
+
+    if (formData.username.length < 3) {
+      setError('Username must be at least 3 characters')
+      return
+    }
+
     setLoading(true)
     
     try {
-      // Add your registration logic here
-      console.log('Register:', formData)
-      navigate('/login')
+      const response = await api.post('/api/auth/register', {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+      })
+      
+      // Store token and user data
+      localStorage.setItem('token', response.data.token)
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      
+      setSuccess('Account created successfully! Redirecting...')
+      setTimeout(() => navigate('/dashboard'), 1500)
     } catch (err) {
-      setError('Registration failed. Please try again.')
+      const errorMessage = err.response?.data?.error || 'Registration failed. Please try again.'
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }
@@ -64,17 +87,32 @@ const Register = () => {
           </div>
         )}
 
+        {success && (
+          <div style={{
+            background: 'rgba(34, 197, 94, 0.1)',
+            border: '1px solid rgba(34, 197, 94, 0.3)',
+            color: '#22c55e',
+            padding: '0.75rem 1rem',
+            borderRadius: 'var(--radius-lg)',
+            marginBottom: '1.5rem',
+            fontSize: '0.875rem',
+          }}>
+            {success}
+          </div>
+        )}
+
         <form className="auth-form" onSubmit={handleSubmit}>
           <div>
-            <label className="label">Full Name</label>
+            <label className="label">Username</label>
             <input
               type="text"
-              name="name"
+              name="username"
               className="input"
-              placeholder="John Doe"
-              value={formData.name}
+              placeholder="johndoe"
+              value={formData.username}
               onChange={handleChange}
               required
+              minLength={3}
             />
           </div>
           <div>

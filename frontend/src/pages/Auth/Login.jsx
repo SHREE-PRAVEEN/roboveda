@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../hooks/useAuth'
+import api from '../../services/api'
 import '../../styles/globals.css'
 
 const Login = () => {
@@ -16,11 +16,16 @@ const Login = () => {
     setLoading(true)
     
     try {
-      // Add your login logic here
-      console.log('Login:', { email, password })
+      const response = await api.post('/api/auth/login', { email, password })
+      
+      // Store token and user data
+      localStorage.setItem('token', response.data.token)
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      
       navigate('/dashboard')
     } catch (err) {
-      setError('Invalid email or password')
+      const errorMessage = err.response?.data?.error || 'Invalid email or password'
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }

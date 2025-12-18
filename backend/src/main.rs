@@ -18,18 +18,21 @@ async fn main() -> std::io::Result<()> {
 
     let config = config::AppConfig::from_env();
     
-    // Database connection pool
-    let pool = PgPool::connect(&config.database_url)
-        .await
-        .expect("Failed to connect to Postgres");
-
-    // Run migrations
-    sqlx::migrate!("./migrations")
-        .run(&pool)
-        .await
-        .expect("Failed to run migrations");
-
-    let pool = Arc::new(pool);
+    // Try to connect to database, but don't fail if unavailable
+    let pool: Option<Arc<PgPool>> = match PgPool::connect(&config.database_url).await {
+        Ok(pool) => {
+            log::info!("✅ Connected to database");
+            // Run migrations if connected
+            if let Err(e) = sqlx::migrate!("./migrations").run(&pool).await {
+                log::warn!("⚠️ Migration warning: {}", e);
+            }
+            Some(Arc::new(pool))
+        }
+        Err(e) => {
+            log::warn!("⚠️ Database not available: {}. Running in limited mode.", e);
+            None
+        }
+    };
     
     // Rate limiter: 100 requests per minute
     let governor_conf = GovernorConfigBuilder::default()
@@ -44,10 +47,13 @@ async fn main() -> std::io::Result<()> {
     log::info!("🚀 Server starting on {}:{}", host, port);
 
     HttpServer::new(move || {
-        let cors = Cors::permissive(); // Configure properly for production
+        let cors = Cors::default()
+            .allow_any_origin()
+            .allow_any_method()
+            .allow_any_header()
+            .max_age(3600);
         
-        App::new()
-            .app_data(web::Data::new(pool.clone()))
+        let mut app = App::new()
             .app_data(web::Data::new(config.clone()))
             .wrap(cors)
             .wrap(middleware::Logger::default())
@@ -58,10 +64,16 @@ async fn main() -> std::io::Result<()> {
                 .add(("X-Content-Type-Options", "nosniff"))
                 .add(("X-Frame-Options", "DENY"))
                 .add(("X-XSS-Protection", "1; mode=block"))
-                .add(("Strict-Transport-Security", "max-age=31536000; includeSubDomains"))
             )
             .route("/health", web::get().to(health_check))
-            .configure(routes::auth::configure)
+            .route("/api/health", web::get().to(health_check));
+        
+        // Add database pool if available
+        if let Some(ref p) = pool {
+            app = app.app_data(web::Data::new(p.clone()));
+        }
+        
+        app.configure(routes::auth::configure)
             .configure(routes::ai::configure)
             .configure(routes::robotics::configure)
             .configure(routes::blockchain::configure)
@@ -73,5 +85,9 @@ async fn main() -> std::io::Result<()> {
 }
 
 async fn health_check() -> HttpResponse {
-    HttpResponse::Ok().json(serde_json::json!({"status": "ok"}))
+    HttpResponse::Ok().json(serde_json::json!({
+        "status": "ok",
+        "service": "RoboVeda API",
+        "version": "1.0.0"
+    }))
 }
