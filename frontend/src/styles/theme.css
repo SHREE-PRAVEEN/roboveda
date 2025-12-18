@@ -1,0 +1,208 @@
+/* RoboVeda Theme Variables */
+
+/* Color Palette */
+.theme-light {
+  --color-primary: #5b5fc7;
+  --color-primary-dark: #4a4eb3;
+  --bg-dark: #f8fafc;
+  --bg-darker: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8fafc;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --border-color: #e2e8f0;
+}
+
+/* Neon Theme */
+.theme-neon {
+  --color-primary: #00ff88;
+  --color-accent: #ff00ff;
+  --color-secondary: #00ffff;
+}
+
+/* Cyberpunk Theme */
+.theme-cyberpunk {
+  --color-primary: #ff2d55;
+  --color-accent: #ffcc00;
+  --bg-card: #1a0a1f;
+  --border-color: #ff2d5533;
+}
+
+/* Robot status colors */
+.status-online { color: #00ff88; }
+.status-offline { color: #71717a; }
+.status-busy { color: #f59e0b; }
+.status-error { color: #ef4444; }
+
+/* Glowing effects */
+.glow-primary {
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4),
+              0 0 40px rgba(99, 102, 241, 0.2),
+              0 0 60px rgba(99, 102, 241, 0.1);
+}
+
+.glow-accent {
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.4),
+              0 0 40px rgba(0, 255, 136, 0.2),
+              0 0 60px rgba(0, 255, 136, 0.1);
+}
+
+.glow-pink {
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.4),
+              0 0 40px rgba(236, 72, 153, 0.2);
+}
+
+/* Glass morphism */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Gradient text presets */
+.gradient-blue-purple {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-green-cyan {
+  background: linear-gradient(135deg, #00ff88, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-pink-orange {
+  background: linear-gradient(135deg, #ec4899, #f97316);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Background patterns */
+.bg-grid {
+  background-image: 
+    linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+.bg-dots {
+  background-image: radial-gradient(rgba(99, 102, 241, 0.15) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.bg-noise {
+  position: relative;
+}
+
+.bg-noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+/* 3D card effect */
+.card-3d {
+  perspective: 1000px;
+}
+
+.card-3d-inner {
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.card-3d:hover .card-3d-inner {
+  transform: rotateY(5deg) rotateX(5deg);
+}
+
+/* Tech border */
+.tech-border {
+  position: relative;
+  border: none;
+}
+
+.tech-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  border-radius: inherit;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* Animated gradient border */
+.animated-border {
+  position: relative;
+  overflow: hidden;
+}
+
+.animated-border::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 90deg,
+    var(--color-accent) 90deg 180deg,
+    transparent 180deg 270deg,
+    var(--color-primary) 270deg 360deg
+  );
+  animation: rotate-border 4s linear infinite;
+}
+
+.animated-border::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: var(--bg-card);
+  border-radius: inherit;
+}
+
+@keyframes rotate-border {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-darker);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Selection */
+::selection {
+  background: var(--color-primary);
+  color: white;
+}
