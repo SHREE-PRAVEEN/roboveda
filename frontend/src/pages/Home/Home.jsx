@@ -9,13 +9,13 @@ export default function Home() {
   const features = [
     {
       icon: '🤖',
-      title: 'Robot SDK',
-      description: 'Complete robotics development kit with pre-built modules, sensor integrations, and motor controllers.',
+      title: 'Web Dump',
+      description: 'focus on buiding robotics SDKs entirely from scratch,eliminating the need of purchase proprietary SDKs through reverse engineering and open hands-on development.',
     },
     {
       icon: '🧠',
-      title: 'AI Engine',
-      description: 'Advanced machine learning models for computer vision, path planning, and autonomous decision making.',
+      title: 'Industrial Automation',
+      description: 'An industrial automation platform where companies build low-cost custom robotic hardware using our web dump, configure systems with expert guidance, and deploy affordable automation software for just $1.6.',
     },
     {
       icon: '🔗',
@@ -24,23 +24,23 @@ export default function Home() {
     },
     {
       icon: '☁️',
-      title: 'Cloud Dashboard',
-      description: 'Monitor and control your robots remotely with our real-time cloud dashboard.',
+      title: 'AI Engine',
+      description: 'Advanced machine learning models for computer vision, path planning, and autonomous decision making.',
     },
     {
       icon: '📡',
-      title: 'IoT Integration',
-      description: 'Seamlessly connect your robots to IoT devices and smart home ecosystems.',
+      title: 'For Developers',
+      description: 'We empower developers through robotics hackathons and challenges, reward excellence with RoboVeda goodies, provide blockchain-verified immutable certifications, and enable developers to earn by selling their robotics solutions to industry.',
     },
     {
       icon: '🛡️',
-      title: 'Enterprise Security',
-      description: 'Bank-grade security with end-to-end encryption and role-based access control.',
+      title: 'Developer Certificates',
+      description: 'Each developer certificate is generated using cryptographic hashing and recorded on a blockchain network. The certificate metadata—including project details, developer identity hash, and timestamp—is stored as an immutable on-chain record. This ensures tamper-proof verification, decentralized validation, and permanent traceability of robotics project ownership and authenticity. Certificates can be independently verified without reliance on a central authority.',
     },
   ]
 
   const stats = [
-    { value: '10K+', label: 'Robots Built' },
+    { value: '00+', label: 'Robots Built' },
     { value: '99.9%', label: 'Uptime' },
     { value: '50+', label: 'Countries' },
     { value: '$1.6', label: 'Starting Price' },
@@ -60,8 +60,8 @@ export default function Home() {
               <span className="text-gradient">RoboVeda</span>
             </h1>
             <p className="hero-subtitle" style={{ maxWidth: '600px', margin: '0 auto 2rem' }}>
-              Premium robotics software, AI-powered automation, and blockchain-secured 
-              licensing. Start building your robot empire today for just $1.6.
+              Open robotics platform for students, developers, industries, and governments.
+Build robots using free hardware guides and deploy premium ROS-based software, AI automation, and secure licensing — starting at just $1.6.
             </p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginBottom: '4rem' }}>
               <Link to="/pricing" className="btn btn-accent btn-lg">

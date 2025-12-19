@@ -8,12 +8,12 @@ const Navbar = () => {
 
   const links = [
     { path: '/', label: 'Home' },
-    { path: '/products', label: 'Products' },
+    { path: '/products', label: 'Projects' },
     { path: '/solutions', label: 'Solutions' },
     { path: '/pricing', label: 'Pricing' },
     { path: '/ai-labs', label: 'AI Labs' },
     { path: '/blockchain', label: 'Blockchain' },
-    { path: '/dev-portal', label: 'Dev Portal' },
+    { path: '/dev-portal', label: 'Developer' },
   ]
 
   return (
